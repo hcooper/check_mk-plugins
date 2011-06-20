@@ -16,15 +16,18 @@ locally too.
 ## Example Configurations
 ### Varnish
 
+```
 status_command="/usr/bin/varnishstat -1"
 prefix = "Varnish_"
 checks = [
        ( "backend_fail", 10, 100),
        ( "client_conn", 40, 100)
 ]
+```
 
 ### MySQL
 
+```
 status_command="/usr/bin/mysql -e 'SHOW STATUS'"
 prefix = "MySQL_"
 checks = [
@@ -35,3 +38,4 @@ checks = [
         ( "Open_tables", 256, 512),
         ( "Slow_queries", 10, 100)
 ]
+```
