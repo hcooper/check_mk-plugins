@@ -4,9 +4,12 @@
 The generic_local plugin for check_mk provides an easy way to monitor the status
 of a service without having to script a custom plugin from scratch.
 
-Originally started to monitoring any given values reported my "SHOW STATUS" in
-MySQL, is was updated to be genericified to allow monitoring of any service
+Originally started to monitoring any given values reported by "SHOW STATUS" in
+MySQL, is was updated to be generic and allow monitoring of any service
 which can present it's stats in a two column format.
+
+For more information on check_mk local plugins, and the format check_mk expects
+have a look at the author's [website](http://mathias-kettner.de/checkmk_localchecks.html).
 
 ## Installation
 The plugin is designed to be a *local* plugin, which doesn't require any
