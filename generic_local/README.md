@@ -16,6 +16,13 @@ locally too.
 Just place the script (set as executable) in the check_mk_agent local directory
 (/usr/lib/check_mk_agent/local on Debian).
 
+## Testing
+As soon as the script is in place it's results should be included in the output
+of check_mk. Test this simply with *telnet localhost 6556*.
+
+To makes the checks live, on the nagios server run "*check_mk -I <hostname>*".
+Followed by a nagios reload "*check_mk -O*".
+
 ## Example Configurations
 ### Varnish
 
