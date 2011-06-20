@@ -11,17 +11,15 @@ which can present it's stats in a two column format.
 ## Installation
 The plugin is designed to be a *local* plugin, which doesn't require any
 configuration on the server side. This means changes to thresholds are done
-locally too.
-
-Just place the script (set as executable) in the check_mk_agent local directory
-(/usr/lib/check_mk_agent/local on Debian).
+locally too. Just place the script (set as executable) in the check_mk_agent local
+directory (/usr/lib/check_mk_agent/local on Debian).
 
 ## Testing
 As soon as the script is in place it's results should be included in the output
-of check_mk. Test this simply with *telnet localhost 6556*.
+of check_mk. Test this simply with "*telnet localhost 6556*".
 
-To makes the checks live, on the nagios server run "*check_mk -I <hostname>*".
-Followed by a nagios reload "*check_mk -O*".
+To makes the checks live, on the nagios server run "*check_mk -I hostname*", 
+followed by a nagios reload "*check_mk -O*".
 
 ## Example Configurations
 ### Varnish
