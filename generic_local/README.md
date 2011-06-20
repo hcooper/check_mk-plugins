@@ -28,7 +28,8 @@ checks = [
 ]
 ```
 
-Example output:
+####Example output:
+
 ```
 2 Varnish_client_conn - CRITICAL: Varnish_client_conn 4630
 1 Varnish_backend_fail - WARNING: Varnish_backend_fail 18
@@ -49,7 +50,8 @@ checks = [
 ]
 ```
 
-Example output:
+####Example output:
+
 ```
 0 MySQL_Max_used_connections - OK: MySQL_Max_used_connections 20
 0 MySQL_Open_files - OK: MySQL_Open_files 445
