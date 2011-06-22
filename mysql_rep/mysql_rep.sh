@@ -6,7 +6,7 @@
 # Hereward Cooper <coops@iomart.com> - 16/06/11
 
 MYSQL_USER="root"
-MYSQL_PASS="CohaypCi"
+MYSQL_PASS="Pa$$word"
 
 # Anything below DELAY_OK is fine. Anything between
 # DELAY_OK and DELAY_WARNING is a warning. Anything
