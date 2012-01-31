@@ -5,14 +5,18 @@
 #
 # Hereward Cooper <coops@iomart.com> - 16/06/11
 
-MYSQL_USER="root"
+MYSQL_USER="user"
 MYSQL_PASS="Pa$$word"
 
-# Anything below DELAY_OK is fine. Anything between
-# DELAY_OK and DELAY_WARNING is a warning. Anything
-# above DELAY_WARNING is critical.
-DELAY_OK=600
-DELAY_WARNING=3600
+# Anything below DELAY_WARNING is fine. Anything between
+# DELAY_WARNING and DELAY_CRITICAL is throw up a warning. Anything
+# above DELAY_CRITICAL will trigger a critical alert.
+DELAY_WARNING=60
+DELAY_CRITICAL=360
+
+# Graph details
+MIN=0
+MAX=400
 
 
 MYSQL_STATUS=`mysql -u$MYSQL_USER -p$MYSQL_PASS -e "SHOW SLAVE STATUS\G" | egrep 'Slave_.*_Running|Seconds_Behind_Master' | sed 's/^ *//'`
@@ -37,12 +41,11 @@ fi
 
 ## Check Seconds_Behind_Master value
 if [ $DELAY = "NULL" ]; then
-        echo "2 MySQL_Rep_Delay - CRITICAL - Replication delay NULL"
-elif [ $DELAY -lt $DELAY_OK ]; then
-        echo "0 MySQL_Rep_Delay - OK - Replication delay $DELAY seconds"
+        echo "2 MySQL_Rep_Delay delay=$DELAY;$DELAY_WARNING;$DELAY_CRITICAL;$MIN;$MAX CRITICAL - Replication delay NULL"
 elif [ $DELAY -lt $DELAY_WARNING ]; then
-        echo "1 MySQL_Rep_Delay - WARNING - Replication delay $DELAY seconds"
-elif [ $DELAY -ge $DELAY_WARNING ]; then
-        echo "2 MySQL_Rep_Delay - CRITICAL - Replication delay $DELAY seconds"
+        echo "0 MySQL_Rep_Delay delay=$DELAY;$DELAY_WARNING;$DELAY_CRITICAL;$MIN;$MAX OK - Replication delay $DELAY seconds"
+elif [ $DELAY -lt $DELAY_CRITICAL ]; then
+        echo "1 MySQL_Rep_Delay delay=$DELAY;$DELAY_WARNING;$DELAY_CRITICAL;$MIN;$MAX WARNING - Replication delay $DELAY seconds"
+elif [ $DELAY -ge $DELAY_CRITICAL ]; then
+        echo "2 MySQL_Rep_Delay delay=$DELAY;$DELAY_WARNING;$DELAY_CRITICAL;$MIN;$MAX CRITICAL - Replication delay $DELAY seconds"
 fi
-
