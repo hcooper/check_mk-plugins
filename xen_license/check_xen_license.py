@@ -49,26 +49,25 @@ def main(session, options):
     # create date object for finding difference in days
     expires_on = date(int(expires[0]), int(expires[1]), int(expires[2]))
     expire_days = (expires_on - date.today()).days
-    display = Template('XenServer License: $status | expire_days=%s' 
-            %expire_days)
+    display = Template('$status')
 
     if int(expire_days) > int(options.warning_days):
-        print display.substitute(status='OK') 
+        print display.substitute(status='0 XenServer_License - OK Expiring in %s days'%expire_days) 
         session.xenapi.session.logout()
         sys.exit(0)
 
     # If number of days until expire is less than warning
     elif int(expire_days) <= int(options.warning_days):
         if int(expire_days) <= int(options.critical_days):
-            print display.substitute(status='CRITICAL Expiring in %s days'%expire_days) 
+            print display.substitute(status='2 XenServer_License - CRITICAL Expiring in %s days'%expire_days) 
             session.xenapi.session.logout()
             sys.exit(2)
         else:
-            print display.substitute(status='WARNING Expiring in %s days'%expire_days) 
+            print display.substitute(status='1 XenServer_License - WARNING Expiring in %s days'%expire_days) 
             session.xenapi.session.logout()
             sys.exit(1)
     else:
-        print display.substitute(status='Unknown')
+        print display.substitute(status='3 XenServer_License - UNKOWN')
         session.xenapi.session.logout()
         sys.exit(3)
 
@@ -119,7 +118,7 @@ if __name__ == "__main__":
             session=XenAPI.Session('https://'+e.details[1])
             session.login_with_password(options.username,options.password)
     except:
-        print 'XenServer License: Unknown, could not establish session'
+        print '3 XenServer_License - UNKOWN, can\'t connect'
         sys.exit(3)
 
     main(session, options)
