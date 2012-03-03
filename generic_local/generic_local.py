@@ -74,8 +74,8 @@ def debug():
 #------------------------------------------------------------
 
 # Function to output the check result in check_mk format
-def output(type, check, value):
-    print str(type) + " " + prefix + check + " - " + str(value)
+def output(state,chkname,text,value,warn,crit):
+    print "%s %s %s=%s;%s;%s %s - %s %s" % (state,chkname,chkname,value,warn,crit,text,chkname,value)
 
 # Read through each line in the output of SHOW STATUS
 def run_checks():
@@ -99,13 +99,16 @@ def run_checks():
                     # Is the variable on the list to check?
                     if var == check:
 
+                        # Merge the prefix and variable name now so we don't have to keep doing it.
+                        chkname = prefix + var
+
                         # If so, what state is it in?
                         if var_value > crit:
-                            output(2,var,"CRITICAL: " + prefix + var + " " + str(var_value))
+                            output(2,chkname,"CRITICAL",var_value,warn,crit)
                         elif var_value > warn:
-                            output(1,var,"WARNING: " + prefix + var + " " + str(var_value))
+                            output(1,chkname,"WARNING",var_value,warn,crit)
                         else:
-                            output(0,var,"OK: " + prefix + var + " " + str(var_value))
+                            output(0,chkname,"OK",var_value,warn,crit)
 
 # Actually do some work!
 run_checks()
