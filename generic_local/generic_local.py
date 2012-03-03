@@ -5,6 +5,7 @@
 # sucessfully tested with MySQL and Varnish.
 
 # Hereward Cooper <coops@fawk.eu>
+# https://github.com/hcooper/check_mk-plugins
 
 #------------------------------------------------------------
 # CONFIGURATION
@@ -24,7 +25,12 @@ prefix = "MySQL_"
 # ("variable name", warning threshold, critical threshold)
 checks = [
 #   ( "Queries_per_second_avg", 1, 5),
-   ( "Slow_queries", 1, 5),
+    ( "Qcache_lowmem_prunes", 10, 100),
+    ( "Max_used_connections", 40, 60),
+    ( "Threads_connected", 25, 40),
+    ( "Open_files", 512, 1024),
+    ( "Open_tables", 256, 512),
+    ( "Slow_queries", 10, 100)
 ]
 
 #------------------------------------------------------------
@@ -74,7 +80,8 @@ def output(type, check, value):
 # Read through each line in the output of SHOW STATUS
 def run_checks():
         for line in status.splitlines():
-            # Sometimes we have a mare reading the first and last lines. Skip if needed.
+
+                # Sometimes we have a mare reading the first and last lines. Skip if needed.
                 try:
                     var = line.split()[0]
                 except:
@@ -88,8 +95,11 @@ def run_checks():
         
                 # Read through each of our configured variables to check
                 for check,warn,crit in checks:
-                    # Is the variable one on the list to check?
+
+                    # Is the variable on the list to check?
                     if var == check:
+
+                        # If so, what state is it in?
                         if var_value > crit:
                             output(2,var,"CRITICAL: " + prefix + var + " " + str(var_value))
                         elif var_value > warn:
