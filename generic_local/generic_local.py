@@ -105,7 +105,7 @@ def run_checks():
 
                         # If the crit+warn are -1, we're not alerting, just graphing
                         if warn == -1 and crit == -1:
-                                output(0,chkname,"OK",var_value,warn,crit)
+                            output(0,chkname,"OK",var_value,warn,crit)
 
                         # Otherwise do normal alerting
                         elif var_value > crit:
