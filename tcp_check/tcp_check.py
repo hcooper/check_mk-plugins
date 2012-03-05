@@ -4,19 +4,37 @@
 
 from socket import *
 
+# Out list of checks (ip, port)
 checks = [
-    ['11.22.33.44', 8443],
-    ['12.13.14.15', 6000],
+        ['11.22.33.44', 8443],
+        ['12.13.14.15', 6000],
+        ['127.0.0.1', 80],
 ]
 
-setdefaulttimeout(5)
-count=0
+# What to prefix all the check names with
+prefix = "TCP_Check_"
+
+# How long to wait for each check?
+timeout = 5
+
+setdefaulttimeout(timeout)
+
 for ip,port in checks:
+
+    # Define a new socket
     s = socket(AF_INET, SOCK_STREAM)
+
+    # Form the check name
+    chkname = prefix + ip + ":" + str(port)
+
+    # Open the connection
     result = s.connect_ex((ip,port))
+
+    # Report the result
     if ( 0 == result ):
-        print "0 Leased_Line_Test_" + str(count) + " - OK: %s:%d Reachable" % (ip,port)
+        print "0 %s - OK - %s:%d Reachable" % (chkname,ip,port)
     else:
-        print "2 Leased_Line_Test_" + str(count) + " - CRITICAL: %s:%d Not Reachable" % (ip,port)
+        print "2 %s - CRITICAL - %s:%d Unreachable" % (chkname,ip,port)
+
+    # Close the connection
     s.close()
-    count=count+1
