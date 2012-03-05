@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # check_mk script to check TCP connections to a remote host.
 # first written to simply check transit down a leased line
 
