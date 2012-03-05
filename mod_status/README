@@ -1,0 +1,4 @@
+This script is designed to dump apache's mod_status output into a format which the
+generic_local check can work with:
+
+https://github.com/hcooper/check_mk-plugins/tree/master/generic_local
