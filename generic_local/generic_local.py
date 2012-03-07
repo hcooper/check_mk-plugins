@@ -23,12 +23,12 @@ prefix = "MySQL_"
 
 # What variables shall we actually check for? Format:
 # ("variable name", warning threshold, critical threshold)
-# Set the warn and crit to -1 and it will never alert, only get graphed
+# Set the warn and crit to None and it will never alert, only get graphed
 checks = [
 #   ( "Queries_per_second_avg", 1, 5),
     ( "Qcache_lowmem_prunes", 10, 100),
     ( "Max_used_connections", 40, 60),
-    ( "Threads_connected", -1, -1),
+    ( "Threads_connected", None, None),
     ( "Open_files", 512, 1024),
     ( "Open_tables", 256, 512),
     ( "Slow_queries", 10, 100)
@@ -103,8 +103,8 @@ def run_checks():
                         # Merge the prefix and variable name now so we don't have to keep doing it.
                         chkname = prefix + var
 
-                        # If the crit+warn are -1, we're not alerting, just graphing
-                        if warn == -1 and crit == -1:
+                        # If the crit and warn are None, we're not alerting, just graphing
+                        if warn == None and crit == None:
                             output(0,chkname,"OK",var_value,warn,crit)
 
                         # Otherwise do normal alerting
