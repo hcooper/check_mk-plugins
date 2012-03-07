@@ -76,7 +76,11 @@ def debug():
 
 # Function to output the check result in check_mk format
 def output(state,chkname,text,value,warn,crit):
-    print "%s %s %s=%s;%s;%s %s - %s %s" % (state,chkname,chkname,value,warn,crit,text,chkname,value)
+    if warn == None and crit == None:
+        # Don't print the warn/crit values if they are set to None
+        print "%s %s %s=%s %s - %s %s" % (state,chkname,chkname,value,text,chkname,value)
+    else:
+        print "%s %s %s=%s;%s;%s %s - %s %s" % (state,chkname,chkname,value,warn,crit,text,chkname,value)
 
 # Read through each line in the output of SHOW STATUS
 def run_checks():
