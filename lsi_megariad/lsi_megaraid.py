@@ -11,7 +11,7 @@ def inventory_lsi_megaraid(checkname, info):
 def check_lsi_megaraid(item, params, info):
 
     # Take the results array, and split it into each of our attributes
-    checks == ['vdDegradedCount', 'vdOfflineCount', 'pdDiskFailedCount', 'pdDiskPredFailureCount']
+    checks = ['vdDegradedCount', 'vdOfflineCount', 'pdDiskFailedCount', 'pdDiskPredFailureCount']
     results = dict(zip(checks, info[0]))
 
     for check in results:
