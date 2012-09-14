@@ -12,14 +12,18 @@ def check_lsi_megaraid(item, params, info):
 
     # Take the results array, and split it into each of our attributes
     checks = ['vdDegradedCount', 'vdOfflineCount', 'pdDiskFailedCount', 'pdDiskPredFailureCount']
+
+    # Make a dictonary of the check name and the result
     results = dict(zip(checks, info[0]))
 
+    # Check the results and return appropriately
     for check in results:
-        if results[check] == 0:
+        if results[check] == '0':
             continue
         else:
             return (2, "CRITICAL - %s: %s" % (check, results[check]))
 
+    # If we haven't returned with an error so far, return OK now
     return (0, "OK - no reported errors")
 
 
