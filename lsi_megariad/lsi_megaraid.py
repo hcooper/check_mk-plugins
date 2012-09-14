@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 # Quick hack to monitoring LSI MegaRaid via SNMP
+# Hereward Cooper <coops@fawk.eu> - Sep 2012
 
 def inventory_lsi_megaraid(checkname, info):
     inventory = []
@@ -10,7 +11,7 @@ def inventory_lsi_megaraid(checkname, info):
 
 def check_lsi_megaraid(item, params, info):
 
-    # Take the results array, and split it into each of our attributes
+    # The 'nice' names for our checks
     checks = ['vdDegradedCount', 'vdOfflineCount', 'pdDiskFailedCount', 'pdDiskPredFailureCount']
 
     # Make a dictonary of the check name and the result
@@ -24,7 +25,7 @@ def check_lsi_megaraid(item, params, info):
             return (2, "CRITICAL - %s: %s" % (check, results[check]))
 
     # If we haven't returned with an error so far, return OK now
-    return (0, "OK - no reported errors")
+    return (0, "OK - No reported errors")
 
 
 check_info["lsi_megaraid"] = (check_lsi_megaraid, "LSI MegaRAID", 0, inventory_lsi_megaraid)
