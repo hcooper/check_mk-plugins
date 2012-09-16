@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 # This is a local plugin for check_mk, suitable for monitoring
 # any service variables which are presented in a list. Currently

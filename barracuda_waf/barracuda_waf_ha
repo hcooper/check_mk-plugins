@@ -1,6 +1,7 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 # Monitor the HA status of a pair of Barracuda WAFs via SNMP
+# Herward Cooper <coops@fawk.eu> - 2012
 
 # When run against each of the members of the pair, a response of
 # 'Primary:Active' or 'Backup:Standby' is considered healthy.

@@ -1,9 +1,8 @@
 #!/bin/bash
-#
+
 # A mysql replication plugin for the check_mk nagios system.
 # Place me in /usr/lib/check_mk_agent/local on the client
-#
-# Hereward Cooper <coops@iomart.com> - 16/06/11
+# Hereward Cooper <coops@fawk.eu> - 16/06/11
 
 MYSQL_USER="user"
 MYSQL_PASS="Pa$$word"

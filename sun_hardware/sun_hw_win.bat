@@ -2,7 +2,7 @@ GOTO EndComment
 This script was written to get the status of Sun Hardware via IPMI in Window Server 2003.
 The output is returned in a format which check_mk can understand. It's a bit of a hack
 but it works!
-Hereward Cooper - Sometime 2011
+Hereward Cooper <coops@fawk.eu> - Sometime 2011
 :EndComment
 @echo off
 set COUNT=

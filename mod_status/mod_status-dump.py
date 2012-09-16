@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 """ Fetch Apache stats via mod_status
 By Hereward Cooper

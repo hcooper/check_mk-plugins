@@ -1,7 +1,14 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
-# Quick hack to monitoring LSI MegaRaid via SNMP
+# Quick hack to monitoring LSI MegaRaid via SNMP with check_mk
+# Tested using Windows LSI tools
 # Hereward Cooper <coops@fawk.eu> - Sep 2012
+
+# Currently checks 4 values, with a base OID of 1.3.6.1.4.1.3582.4.1.4.1.2.1
+# .19 = vdDegradedCount
+# .20 = vdOfflineCount
+# .24 = pdDiskFailedCount
+# .23 = pdDiskPredFailureCount
 
 def inventory_lsi_megaraid(checkname, info):
     inventory = []

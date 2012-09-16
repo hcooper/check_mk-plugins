@@ -1,10 +1,11 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # check_mk script to check TCP connections to a remote host.
 # first written to simply check transit down a leased line
+# Herward Cooper <coops@fawk.eu> - 2011
 
 from socket import *
 
-# Out list of checks (ip, port)
+# Out list of checks, in the form: ['ip', port]
 checks = [
         ['11.22.33.44', 8443],
         ['12.13.14.15', 6000],
@@ -31,7 +32,7 @@ for ip,port in checks:
     result = s.connect_ex((ip,port))
 
     # Report the result
-    if ( 0 == result ):
+    if ( result == 0 ):
         print "0 %s - OK - %s:%d Reachable" % (chkname,ip,port)
     else:
         print "2 %s - CRITICAL - %s:%d Unreachable" % (chkname,ip,port)
