@@ -12,7 +12,9 @@
 
 def inventory_lsi_megaraid(checkname, info):
     inventory = []
-    inventory.append( (None, None) )
+    # If 'info' isn't empty, add it to the inventory
+    if info != []:
+            inventory.append( (None, None) )
     return inventory
 
 
