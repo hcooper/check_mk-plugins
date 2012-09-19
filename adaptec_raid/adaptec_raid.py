@@ -1,32 +1,14 @@
-#!/usr/bin/python
-# Modified version of check from:
-#  http://exchange.nagios.org/directory/Plugins/Hardware/Storage-Systems/RAID-Controllers/Adaptec-RAID-Check-by-Anchor-Systems/details
-# Anchor System - http://www.anchor.com.au
+#!/usr/bin/env python
+# check-aacraid.py modified version of check from http://exchange.nagios.org/
 #
-# Oliver Hookins
-# Paul De Audney
-# Barney Desmond
-#
-# check-aacraid.py
-#
-# Grabs the output from "/usr/StorMan/arcconf GETCONFIG 1 LD" then
-# determines the health of the Logical Devices.
-#
-# Grabs the output from "/usr/StorMan/arcconf GETCONFIG 1 AL" then
-# determines the health of various status indicators from the card
-# and drives.
-#
-# After the checks are run, it deletes the file "UcliEvt.log" from
-# the current working directory.
-#
-# Add this to your "/etc/sudoers" file:
-# "nagios ALL=(root) NOPASSWD: /usr/StorMan/arcconf GETCONFIG 1 *"
-#
-# v0.1 - only checks card information so far, not drives yet
-# v0.2 - checks logical volume status & wipes log
-# v0.3 - strips trailing "," & tells you the logical volume with
-#        the failure
+# Additions:
+#  - switch between check_mk and nrpe modes
+#  - customize the command (so it works on Linux or Windows)
 
+# Original by: Oliver Hookins, Paul De Audney and Barney Desmond.
+# This version by Hereward Cooper <coops@fawk.eu>
+
+# Change mode between 'check_mk' and 'nrpe' to reflect monitoring setup
 mode = "check_mk"
 #mode = "nrpe"
 
@@ -50,6 +32,7 @@ lnum = ""
 check_status = 0
 result = ""
 
+# Get logical drive status
 for line in os.popen4(command + " GETCONFIG 1 LD")[1].readlines():
         # Match the regexs
         ldevice = l_device_re.match(line)
@@ -63,6 +46,7 @@ for line in os.popen4(command + " GETCONFIG 1 LD")[1].readlines():
                         check_status = 2
                 result += "Logical Device " + lnum + " " + lstatus.group(1) + ","
 
+# Get general card status
 for line in os.popen4(command + " GETCONFIG 1 AD")[1].readlines():
         # Match the regexs
         cstatus = c_status_re.match(line)
@@ -145,6 +129,7 @@ if mode == "check_mk":
 elif mode == "nrpe":
         print result
 
+# Delete log once we've finished
 try:
         cwd = os.getcwd()
         fullpath = os.path.join(cwd,'UcliEvt.log')
