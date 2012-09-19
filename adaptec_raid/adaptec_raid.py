@@ -50,7 +50,7 @@ lnum = ""
 check_status = 0
 result = ""
 
-for line in os.popen4(" GETCONFIG 1 LD")[1].readlines():
+for line in os.popen4(command + " GETCONFIG 1 LD")[1].readlines():
         # Match the regexs
         ldevice = l_device_re.match(line)
         if ldevice:
@@ -63,7 +63,7 @@ for line in os.popen4(" GETCONFIG 1 LD")[1].readlines():
                         check_status = 2
                 result += "Logical Device " + lnum + " " + lstatus.group(1) + ","
 
-for line in os.popen4("/usr/bin/sudo /usr/StorMan/arcconf GETCONFIG 1 AD")[1].readlines():
+for line in os.popen4(command + " GETCONFIG 1 AD")[1].readlines():
         # Match the regexs
         cstatus = c_status_re.match(line)
         if cstatus:
