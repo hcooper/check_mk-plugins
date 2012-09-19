@@ -27,8 +27,8 @@
 # v0.3 - strips trailing "," & tells you the logical volume with
 #        the failure
 
-mode = check_mk
-#mode = nrpe
+mode = "check_mk"
+#mode = "nrpe"
 
 #command = "/usr/bin/sudo /usr/StorMan/arcconf"
 command = '\"E:\Adaptec\Adaptec Storage Manager\\arcconf\"'
