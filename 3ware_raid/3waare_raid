@@ -1,0 +1,38 @@
+#!/usr/bin/env python
+
+# Very quick hack to monitor 3ware RAID cards via SNMP with check_mk
+# Tested using Windows 3ware SNMP plugin (3wSnmp.msi from http://kb.lsi.com)
+# Hereward Cooper <coops@fawk.eu> - Sep 2012
+
+# MIB: TW-RAID-MIB
+# .1.3.6.1.4.1.1458.100.22.1.10.X = twRaidDriveStatus.X
+# 255 = OK
+
+
+def inventory_3ware_raid(checkname, info):
+    inventory = []
+    # If 'info' isn't empty, add it to the inventory
+    if info != []:
+            inventory.append( (None, None) )
+    return inventory
+
+
+def check_3ware_raid(item, params, info):
+
+    output = ""
+    retval = 0
+
+    # Check the results and return appropriately
+    for count, check in enumerate(info[0]):
+        if check == '255':
+            output += "disk %s OK, "
+        else:
+            output += "disk %s Error, "
+            retval = 2
+
+    return (retval, output)
+
+
+check_info["3ware_raid"] = (check_3ware_raid, "3ware RAID", 0, inventory_3ware_raid)
+snmp_info["3ware_raid"] = ( ".1.3.6.1.4.1.1458.100.22.1", ["10"] )
+
