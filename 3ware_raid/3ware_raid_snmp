@@ -9,7 +9,7 @@
 # 255 = OK
 
 
-def inventory_3ware_raid(checkname, info):
+def inventory_3ware_raid_snmp(checkname, info):
     inventory = []
     # If 'info' isn't empty, add it to the inventory
     if info != []:
@@ -17,7 +17,7 @@ def inventory_3ware_raid(checkname, info):
     return inventory
 
 
-def check_3ware_raid(item, params, info):
+def check_3ware_raid_snmp(item, params, info):
 
     output = ""
     retval = 0
@@ -32,12 +32,11 @@ def check_3ware_raid(item, params, info):
             retval = 2
 
     if retval == 0:
-            output = "OK - " + output
+            output = "OK - " + output[:-2]
     elif retval == 2:
-            output = "CRITICAL - " + output
+            output = "CRITICAL - " + output[:-2]
     return (retval, output)
 
 
-check_info["3ware_raid"] = (check_3ware_raid, "3ware RAID", 0, inventory_3ware_raid)
-snmp_info["3ware_raid"] = ( ".1.3.6.1.4.1.1458.100.22.1", ["10"] )
-
+check_info["3ware_raid_snmp"] = (check_3ware_raid_snmp, "3ware RAID", 0, inventory_3ware_raid_snmp)
+snmp_info["3ware_raid_snmp"] = ( ".1.3.6.1.4.1.1458.100.23.1", ["7"] )
