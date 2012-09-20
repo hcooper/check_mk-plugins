@@ -25,9 +25,9 @@ def check_3ware_raid(item, params, info):
     # Check the results and return appropriately
     for count, check in enumerate(info):
         if check == '255':
-            output += "disk %s OK, " % (count)
+            output += "Disk %s OK, " % (count)
         else:
-            output += "disk %s Error, " % (count)
+                output += "Disk %s Error (code: %s), " % (count, check)
             retval = 2
 
     if retval == 0:
