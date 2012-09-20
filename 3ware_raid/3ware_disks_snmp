@@ -38,5 +38,5 @@ def check_3ware_disks_snmp(item, params, info):
     return (retval, output)
 
 
-check_info["3ware_disks_snmp"] = (check_3ware_disks_snmp, "3ware RAID", 0, inventory_3ware_disks_snmp)
+check_info["3ware_disks_snmp"] = (check_3ware_disks_snmp, "3ware RAID Disks", 0, inventory_3ware_disks_snmp)
 snmp_info["3ware_disks_snmp"] = ( ".1.3.6.1.4.1.1458.100.22.1", ["10"] )
