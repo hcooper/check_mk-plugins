@@ -26,9 +26,9 @@ def check_3ware_raid_snmp(item, params, info):
     for count, rawcheck in enumerate(info):
         check = rawcheck[0]
         if check == '0':
-            output += "Disk %s OK, " % (count)
+            output += "Array %s OK, " % (count)
         else:
-            output += "Disk %s Error (code: %s), " % (count, check)
+            output += "Array %s Error (code: %s), " % (count, check)
             retval = 2
 
     if retval == 0:
