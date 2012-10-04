@@ -80,7 +80,7 @@ def run_checks():
                     output += "status DOWN"
                     alert_crit = True
                 elif server['status'] == "OPEN":
-                    output =+ "status OPEN"
+                    output += "status OPEN"
                 elif server['status'] == 
     
             # Generic check for the other fields which are numeric
@@ -120,7 +120,7 @@ if __name__ == "__main__":
     socket="/var/run/haproxy.socket"
 
     # A list of servers to ignore from the CSV output (format: "|^name")
-    ignore="|^haproxystats"
+    ignore="^haproxystats"
 
     # This is the command to run to retrieve the raw stats from the socket
     command="echo 'show stat' | nc -U %s | egrep -v '(^#|%s)'"%(socket,ignore)
