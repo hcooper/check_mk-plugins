@@ -4,7 +4,6 @@
 # Hereward Cooper <coops@fawk.eu>
 
 # Requirements:
-# - Netcat (nc command)
 # - HAproxy socket
 #   (config: "stats socket /var/run/haproxy.socket")
 
@@ -14,40 +13,48 @@
 import os
 import re
 import sys
+import StringIO
 
-__version__ = "0.1"
+# from __future__ import absolute_import, division, print_function, unicode_literals
+ 
+# stdlib
+import socket
+from cStringIO import StringIO
+from time import time
+from traceback import format_exc
+
+__version__ = "0.2"
 __author__ = "Hereward Cooper <coops@fawk.eu>"
 __website__ = "http://github.com/hcooper/haproxy-tools/"
 
 
-def build_array():
-
+def build_array(rawstats):
     """
     Convert the raw stats into nested arrays. Much nicer to use.
     This functions creates an array, with each element being a dictonary of checks for each server
     e.g. servers = [ {pxname: app1, rate: 15...}, {pxname: app2, rate: 7...} ]
     """
 
-    data = os.popen(command).read()     # Retrieve the raw data
+    stats=[]
 
-    #Initalize our array
-    global servers
-    servers=[]
+    for line in rawstats.split('\n'):
 
-    for line in data.split('\n'):		# split out each line of raw input
-        if re.match(r'^\s*$', line):    # skip empty lines
+        if re.match(r'^\s*$', line):  # skip empty lines
             continue
-        i=0
-        dict={}
-        for var in line.split(','):         # for each value put it in a dictonary matching the human readable name in "title_array"
-                dict[title_array[i]]=var
-                i=i+1
-        servers.append(dict)
 
-    return servers
+        values = line.split(',')
+
+        if re.match(r'^#', line):  # first line contains the header names
+            titles = values
+            titles[0] = titles[0][2:]  # remove the '# ' from the first element
+            continue
+
+        stats.append(dict(zip(titles,values)))  # create the dict containing our results
+
+    return stats
 
 
-def run_checks():
+def run_checks(servers):
 
     """
     Interate through each server, and then each defined check, and compare the values to
@@ -81,7 +88,7 @@ def run_checks():
                     alert_crit = True
                 elif server['status'] == "OPEN":
                     output += "status OPEN"
-                elif server['status'] == 
+                # elif server['status'] == 
     
             # Generic check for the other fields which are numeric
             # Make sure int() is used when needed!
@@ -114,30 +121,45 @@ def run_checks():
         else:
             print "0 HAProxy_%s %s OK - [%s]" % (server['svname'], allperf, result)
 
+
+class HAProxyStats(object):
+    """ Used for communicating with HAProxy through its local UNIX socket interface"""
+
+    def __init__(self, socket_name=None):
+        self.socket_name = socket_name
+
+    def getstats(self, timeout=200):
+        """ Executes a HAProxy command by sending a message to a HAProxy's local
+        UNIX socket and waiting up to 'timeout' milliseconds for the response """
+
+        buff = StringIO()
+        end = time() + timeout
+
+        client = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+
+        try:
+            client.connect(self.socket_name)
+            client.send('show stat' + '\n')
+
+            while time() <=  end:
+                data = client.recv(4096)
+                if data:
+                    buff.write(data)
+                else:
+                    return build_array(buff.getvalue())
+        except Exception, e:
+            msg = 'An error has occurred, e=[{e}]'.format(e=format_exc(e))
+            raise
+        finally:
+            client.close()
+
+
+
 if __name__ == "__main__":
 
-    # Location of the HAProxy socket
-    socket="/var/run/haproxy.socket"
+    statssocket = HAProxyStats("/var/run/haproxy.socket")
+    stats = statssocket.getstats()
 
-    # A list of servers to ignore from the CSV output (format: "|^name")
-    ignore="^haproxystats"
-
-    # This is the command to run to retrieve the raw stats from the socket
-    command="echo 'show stat' | nc -U %s | egrep -v '(^#|%s)'"%(socket,ignore)
-
-    # These are the names haproxy calls each of the columns it outputs. We can improve the names
-    # by just changing them here. But most of them are fine
-    titles="pxname,svname,qcur,qmax,scur,smax,slim,stot,bin,bout,dreq,dresp,ereq,econ,eresp,\
-        wretr,wredis,status,weight,act,bck,chkfail,chkdown,lastchg,downtime,qlimit,\
-        pid,iid,sid,throttle,lbtot,tracked,type,rate,rate_lim,rate_max,check_status,\
-        check_code,check_duration,hrsp_1xx,hrsp_2xx,hrsp_3xx,hrsp_4xx,hrsp_5xx,\
-        hrsp_other,hanafail,req_rate,req_rate_max,req_tot,cli_abrt,srv_abrt,misc"
-
-    # Put the column titles into an array
-    title_array=titles.split(',')
-
-    # Read in our list of checks
     from checks import checks
 
-    build_array()
-    run_checks()
+    run_checks(stats)
