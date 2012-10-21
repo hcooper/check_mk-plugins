@@ -13,15 +13,9 @@
 import os
 import re
 import sys
-import StringIO
-
-# from __future__ import absolute_import, division, print_function, unicode_literals
- 
-# stdlib
-import socket
 from cStringIO import StringIO
+import socket
 from time import time
-from traceback import format_exc
 
 __version__ = "0.2"
 __author__ = "Hereward Cooper <coops@fawk.eu>"
@@ -29,11 +23,9 @@ __website__ = "http://github.com/hcooper/haproxy-tools/"
 
 
 def build_array(rawstats):
-    """
-    Convert the raw stats into nested arrays. Much nicer to use.
+    """ Convert the raw stats into nested arrays. Much nicer to use.
     This functions creates an array, with each element being a dictonary of checks for each server
-    e.g. servers = [ {pxname: app1, rate: 15...}, {pxname: app2, rate: 7...} ]
-    """
+    e.g. servers = [ {pxname: app1, rate: 15...}, {pxname: app2, rate: 7...} ] """
 
     stats=[]
 
@@ -55,11 +47,8 @@ def build_array(rawstats):
 
 
 def run_checks(servers):
-
-    """
-    Interate through each server, and then each defined check, and compare the values to
-    the critical/warning levels, then alert if need be.
-    """
+    """ Interate through each server, and then each defined check, and compare the values to
+    the critical/warning levels, then alert if need be. """
 
     for server in servers:
         if server['svname'] == "FRONTEND" or server['svname'] == "BACKEND":
@@ -88,7 +77,7 @@ def run_checks(servers):
                     alert_crit = True
                 elif server['status'] == "OPEN":
                     output += "status OPEN"
-                # elif server['status'] == 
+                # Add more status options here
     
             # Generic check for the other fields which are numeric
             # Make sure int() is used when needed!
@@ -147,9 +136,9 @@ class HAProxyStats(object):
                     buff.write(data)
                 else:
                     return build_array(buff.getvalue())
-        except Exception, e:
-            msg = 'An error has occurred, e=[{e}]'.format(e=format_exc(e))
-            raise
+        except:
+            print "Failed to retrieve stats"
+            sys.exit(1)
         finally:
             client.close()
 
@@ -157,7 +146,13 @@ class HAProxyStats(object):
 
 if __name__ == "__main__":
 
-    statssocket = HAProxyStats("/var/run/haproxy.socket")
+    socketfile = "/var/run/haproxy.socket"
+
+    if not os.path.exists(socketfile):
+            print "Socket does not exist"
+            sys.exit(1)
+
+    statssocket = HAProxyStats(socketfile)
     stats = statssocket.getstats()
 
     from checks import checks
