@@ -7,9 +7,6 @@
 # - HAproxy socket
 #   (config: "stats socket /var/run/haproxy.socket")
 
-# Precaution: check_mk presumes each check is a unique name. However HAProxy allows
-# servers to be called the same. If this happens, checks will overwrite each other.
-
 import os
 import re
 import sys
@@ -51,8 +48,7 @@ def run_checks(servers):
     the critical/warning levels, then alert if need be. """
 
     for server in servers:
-        if server['svname'] == "FRONTEND" or server['svname'] == "BACKEND":
-            server['svname'] = server['svname'] + "_" + server['pxname']
+        server['fullname'] = server['pxname'] + "/" + server['svname']  # Combine 'svname' and 'pxname' to get a unique name
 
         # Define some variables before use
         result=""           # The complete set of results for each server's checks
@@ -104,11 +100,11 @@ def run_checks(servers):
 
         # If any of our checks have set the crit/warn flags, act on it
         if alert_crit:
-            print "2 HAProxy_%s %s CRITICAL - [%s]" % (server['svname'], allperf, result)
+            print "2 HAProxy_%s %s CRITICAL - [%s]" % (server['fullname'], allperf, result)
         elif alert_warn:
-            print "1 HAProxy_%s %s WARNING - [%s]" % (server['svname'], allperf, result)
+            print "1 HAProxy_%s %s WARNING - [%s]" % (server['fullname'], allperf, result)
         else:
-            print "0 HAProxy_%s %s OK - [%s]" % (server['svname'], allperf, result)
+            print "0 HAProxy_%s %s OK - [%s]" % (server['fullname'], allperf, result)
 
 
 class HAProxyStats(object):
@@ -155,6 +151,6 @@ if __name__ == "__main__":
     statssocket = HAProxyStats(socketfile)
     stats = statssocket.getstats()
 
-    from checks import checks
+    from haproxychecks import checks
 
     run_checks(stats)
