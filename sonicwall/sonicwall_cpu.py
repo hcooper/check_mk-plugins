@@ -9,9 +9,7 @@ sonicwall_cpu_default_values = (35, 40)
 
 def inventory_sonicwall_cpu(checkname, info):
     inventory=[]
-    status = int(info[0][0])
-    if status < 11:
-        inventory.append( (None, None, "sonicwall_cpu_default_values") )
+    inventory.append( (None, None, "sonicwall_cpu_default_values") )
     return inventory
 
 
