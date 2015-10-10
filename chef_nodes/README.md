@@ -2,7 +2,7 @@ This is a local check_mk script for monitoring the last time chef nodes (i.e. cl
 checked-in with a chef server. A shell script wrapper executes a `knife` script to produce
 data about each chef node. Alarm thresholds are configured in `knife_status.rb`.
 
-Place `chef_nodes.sh` in your check_mk local directory, and amend the paths.
+Place `chef_nodes.sh` in your check_mk local directory on the machine with knife setup, and amend the paths.
 Place `knife_status.rb` somewhere convient e.g. `$KNIFE_DIR/scripts/`
 
 Example output:
