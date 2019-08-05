@@ -10,7 +10,7 @@
 import os
 import re
 import sys
-from cStringIO import StringIO
+from io import StringIO
 import socket
 from time import time
 
@@ -100,11 +100,11 @@ def run_checks(servers):
 
         # If any of our checks have set the crit/warn flags, act on it
         if alert_crit:
-            print "2 HAProxy_%s %s CRITICAL - [%s]" % (server['fullname'], allperf, result)
+            print ("2 HAProxy_%s %s CRITICAL - [%s]" % (server['fullname'], allperf, result))
         elif alert_warn:
-            print "1 HAProxy_%s %s WARNING - [%s]" % (server['fullname'], allperf, result)
+            print ("1 HAProxy_%s %s WARNING - [%s]" % (server['fullname'], allperf, result))
         else:
-            print "0 HAProxy_%s %s OK - [%s]" % (server['fullname'], allperf, result)
+            print ("0 HAProxy_%s %s OK - [%s]" % (server['fullname'], allperf, result))
 
 
 class HAProxyStats(object):
@@ -124,16 +124,17 @@ class HAProxyStats(object):
 
         try:
             client.connect(self.socket_name)
-            client.send('show stat' + '\n')
+            client.send(('show stat' + '\n').encode())
 
             while time() <=  end:
-                data = client.recv(4096)
+                databyte = client.recv(4096)
+                data = databyte.decode()
                 if data:
                     buff.write(data)
                 else:
                     return build_array(buff.getvalue())
         except:
-            print "Failed to retrieve stats"
+            print ("Failed to retrieve stats")
             sys.exit(1)
         finally:
             client.close()
@@ -145,7 +146,7 @@ if __name__ == "__main__":
     socketfile = "/var/run/haproxy.socket"
 
     if not os.path.exists(socketfile):
-            print "Socket does not exist"
+            print ("Socket does not exist")
             sys.exit(1)
 
     statssocket = HAProxyStats(socketfile)
