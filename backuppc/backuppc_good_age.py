@@ -11,6 +11,9 @@ Requires:
 import json
 import sh
 import time
+import os
+
+os.setuid(114) # Switch to backuppc user
 
 # Thresholds, in hours.
 WARN = 36
