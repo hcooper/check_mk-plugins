@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 
-''' Check the age of a status file chef touches '''
+'''
+Some hosts run chef via cron like this:
+  /usr/bin/chef-solo  && touch /run/chef.last_success
+This check monitors the age of the last_success file.
+'''
 
 import os
 import time
