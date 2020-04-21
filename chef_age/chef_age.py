@@ -19,10 +19,10 @@ try:
     d_nice = round(d/60/60, 2)
 
     if d < (60*60*WARN):
-        print(f"0 chef_success_age - OK chef successfully ran {d_nice} hours ago.")
+        print(f"0 Chef_success_age - chef successfully ran {d_nice} hours ago.")
     elif (60*60*WARN) < d < (60*60*CRIT):
-        print(f"1 chef_success_age - WARNING chef hasn't run successfully for {d_nice} hours.")
+        print(f"1 Chef_success_age - chef hasn't run successfully for {d_nice} hours.")
     else:
-        print(f"2 chef_success_age - CRITICAL chef hasn't run successfully for {d_nice} hours.")
+        print(f"2 Chef_success_age - chef hasn't run successfully for {d_nice} hours.")
 except:
-    print(f"3 chef_success_age - UNKNOWN failure in calculating chef age.")
+    print(f"3 Chef_success_age - UNKNOWN failure in calculating chef age.")

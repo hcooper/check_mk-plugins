@@ -37,13 +37,13 @@ for host, info in j.items():
 
     if d < (60*60*WARN):
         print(
-            f"0 {host}_backup_age - OK {host}'s last good backup is {d_nice}h old."
+            f"0 Backup_age_{host} - {host}'s last good backup is {d_nice}h old."
         )
     elif (60*60*WARN) < d < (60*60*CRIT):
         print(
-            f"1 {host}_backup_age - WARNING {host}'s last good backup is {d_nice}h old."
+            f"1 Backup_age_{host} - {host}'s last good backup is {d_nice}h old."
         )
     else:
         print(
-            f"2 {host}_backup_age - CRITICAL {host}'s last good backup is {d_nice}h old."
+            f"2 Backup_age_{host} - {host}'s last good backup is {d_nice}h old."
         )
